@@ -763,6 +763,25 @@ export class Scraper {
   }
 
   /**
+   * Login to Twitter as a real Twitter account using OAuth 2.0.
+   * @param appKey The developer portal consumer key
+   * @param appSecret The developer portal consumer secret
+   * @param accessToken The authorized client token
+   * @param accessSecret The authorized client secret
+   */
+  public loginV2(
+    appKey: string,
+    appSecret: string,
+    accessToken: string,
+    accessSecret: string,
+  ): void {
+    const userAuth = new TwitterUserAuth(this.token, this.getAuthOptions());
+    userAuth.loginWithV2(appKey, appSecret, accessToken, accessSecret);
+    this.auth = userAuth;
+    this.authTrends = userAuth;
+  }
+
+  /**
    * Log out of Twitter.
    */
   public async logout(): Promise<void> {
