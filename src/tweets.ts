@@ -921,12 +921,11 @@ export async function getTweetV2(
       return null;
     }
 
-    const defaultTweetData = await getTweet(tweetData.data.id, auth);
     // Extract primary tweet data
     const parsedTweet = parseTweetV2ToV1(
       tweetData.data,
       tweetData?.includes,
-      defaultTweetData,
+      null,
     );
 
     return parsedTweet;

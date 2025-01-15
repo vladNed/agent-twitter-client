@@ -412,3 +412,19 @@ export class TwitterUserAuth extends TwitterGuestAuth {
     };
   }
 }
+
+export class TwitterUser2Auth extends TwitterGuestAuth {
+  async isLoggedIn(): Promise<boolean> {
+    if (this.v2Client === null) {
+      return false;
+    }
+
+    try {
+      await this.v2Client.v1.verifyCredentials();
+    } catch (error) {
+      return false;
+    }
+
+    return true;
+  }
+}

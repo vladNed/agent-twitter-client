@@ -6,7 +6,7 @@ import {
   RequestApiResult,
 } from './api';
 import { TwitterAuth, TwitterAuthOptions, TwitterGuestAuth } from './auth';
-import { TwitterUserAuth } from './auth-user';
+import { TwitterUser2Auth, TwitterUserAuth } from './auth-user';
 import {
   getProfile,
   getUserIdByScreenName,
@@ -151,6 +151,7 @@ export class Scraper {
    * @returns The requested {@link Profile}.
    */
   public async getProfile(username: string): Promise<Profile> {
+    console.log('>>> CALLING SCRAPER GET PROFILE');
     const res = await getProfile(username, this.auth);
     return this.handleResponse(res);
   }
@@ -775,8 +776,9 @@ export class Scraper {
     accessToken: string,
     accessSecret: string,
   ): void {
-    const userAuth = new TwitterUserAuth(this.token, this.getAuthOptions());
+    const userAuth = new TwitterUser2Auth(this.token, this.getAuthOptions());
     userAuth.loginWithV2(appKey, appSecret, accessToken, accessSecret);
+
     this.auth = userAuth;
     this.authTrends = userAuth;
   }
