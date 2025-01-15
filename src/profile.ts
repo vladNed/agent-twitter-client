@@ -151,7 +151,10 @@ export async function getProfile(
     }) ?? '',
   );
 
-  params.set('fieldToggles', stringify({ withAuxiliaryUserLabels: false }) ?? '');
+  params.set(
+    'fieldToggles',
+    stringify({ withAuxiliaryUserLabels: false }) ?? '',
+  );
 
   const res = await requestApi<UserRaw>(
     `https://twitter.com/i/api/graphql/G3KGOASz96M-Qu0nwmGXNg/UserByScreenName?${params.toString()}`,
