@@ -1,3 +1,4 @@
+import { TweetSearchRecentV2Paginator } from 'twitter-api-v2';
 import { Profile, parseProfile } from './profile';
 import { QueryProfilesResponse, QueryTweetsResponse } from './timeline-v1';
 import { SearchEntryRaw, parseLegacyTweet } from './timeline-v2';
@@ -68,6 +69,74 @@ export function parseSearchTimelineTweets(
         }
       }
     }
+  }
+
+  return { tweets, next: bottomCursor, previous: topCursor };
+}
+
+export function parseSearchTimelineTweetsV2(
+  timeline: TweetSearchRecentV2Paginator,
+): QueryTweetsResponse {
+  let topCursor: string | undefined;
+  const bottomCursor = timeline.meta.next_token;
+  const tweets: Tweet[] = [];
+
+  for (const unprocessedTweet of timeline.data.data) {
+    const tweet: Tweet = {
+      bookmarkCount: undefined,
+      conversationId: unprocessedTweet.conversation_id,
+      hashtags:
+        unprocessedTweet.entities?.hashtags?.map((hashtag) => hashtag.tag) || [],
+      likes: unprocessedTweet.public_metrics?.like_count,
+      mentions:
+        unprocessedTweet.entities?.mentions?.map((mention) => ({
+          id: mention.id,
+          username: mention.username,
+          name: mention.username,
+        })) || [],
+      name: unprocessedTweet.author_id,
+      permanentUrl: `https://twitter.com/i/web/status/${unprocessedTweet.id}`,
+      replies: unprocessedTweet.public_metrics?.reply_count,
+      retweets: unprocessedTweet.public_metrics?.retweet_count,
+      text: unprocessedTweet.text,
+      thread: [],
+      urls: unprocessedTweet.entities?.urls?.map((url) => url.url) || [],
+      userId: unprocessedTweet.author_id,
+      username: unprocessedTweet.author_id,
+      videos: [],
+      photos: [],
+      isQuoted: false,
+      isReply: false,
+      isRetweet: false,
+      isPin: false,
+    };
+
+    const quotedStatusIdStr = unprocessedTweet.referenced_tweets?.find(
+      (tweet) => tweet.type === 'quoted',
+    )?.id;
+    const inReplyToStatusIdStr = unprocessedTweet.referenced_tweets?.find(
+      (tweet) => tweet.type === 'replied_to',
+    )?.id;
+    const retweetedStatusIdStr = unprocessedTweet.referenced_tweets?.find(
+      (tweet) => tweet.type === 'retweeted',
+    )?.id;
+
+    if (quotedStatusIdStr) {
+      tweet.isQuoted = true;
+      tweet.quotedStatusId = quotedStatusIdStr;
+    }
+
+    if (inReplyToStatusIdStr) {
+      tweet.isReply = true;
+      tweet.inReplyToStatusId = inReplyToStatusIdStr;
+    }
+
+    if (retweetedStatusIdStr) {
+      tweet.isRetweet = true;
+      tweet.retweetedStatusId = retweetedStatusIdStr;
+    }
+
+    tweets.push(tweet);
   }
 
   return { tweets, next: bottomCursor, previous: topCursor };

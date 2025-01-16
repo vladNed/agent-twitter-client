@@ -16,6 +16,7 @@ import {
 import {
   fetchSearchProfiles,
   fetchSearchTweets,
+  fetchSearchTweetsV2,
   SearchMode,
   searchProfiles,
   searchTweets,
@@ -221,6 +222,21 @@ export class Scraper {
     cursor?: string,
   ): Promise<QueryTweetsResponse> {
     return fetchSearchTweets(query, maxTweets, searchMode, this.auth, cursor);
+  }
+
+  /**
+   * Fetches tweets from Twitter using V2 API.
+   * @param query The search query. Any Twitter-compatible query format can be used.
+   * @param maxTweets The maximum number of tweets to return.
+   * @param cursor The search cursor, which can be passed into further requests for more results.
+   * @@returns A page of results, containing a cursor that can be used in further requests.
+   */
+  public fetchSearchTweetsV2(
+    query: string,
+    maxTweets: number,
+    cursor?: string,
+  ): Promise<QueryTweetsResponse> {
+    return fetchSearchTweetsV2(query, maxTweets, this.auth, cursor);
   }
 
   /**
