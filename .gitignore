@@ -119,3 +119,6 @@ docs/
 yarn.lock
 
 cookies.json
+
+SampleAgent.js
+SampleAgent.mjs

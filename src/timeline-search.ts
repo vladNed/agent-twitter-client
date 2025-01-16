@@ -83,6 +83,7 @@ export function parseSearchTimelineTweetsV2(
 
   for (const unprocessedTweet of timeline.data.data) {
     const tweet: Tweet = {
+      id: unprocessedTweet.id,
       bookmarkCount: undefined,
       conversationId: unprocessedTweet.conversation_id,
       hashtags:
