@@ -193,6 +193,7 @@ export interface Tweet {
   views?: number;
   sensitiveContent?: boolean;
   poll?: PollV2 | null;
+  createdAt?: string;
 }
 
 export type TweetQuery =
@@ -379,6 +380,7 @@ export function parseTweetV2ToV1(
     name: defaultTweetData?.name ?? '',
     place: defaultTweetData?.place,
     thread: defaultTweetData?.thread ?? [],
+    createdAt: tweetV2.created_at,
   };
 
   // Process Polls
