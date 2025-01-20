@@ -316,6 +316,21 @@ export async function createCreateTweetRequestV2(
         'end_datetime',
         'voting_status',
       ],
+      tweetFields: [
+        'attachments',
+        'author_id',
+        'conversation_id',
+        'created_at',
+        'entities',
+        'id',
+        'in_reply_to_user_id',
+        'lang',
+        'public_metrics',
+        'source',
+        'text',
+        'note_tweet',
+        'edit_history_tweet_ids',
+      ],
     };
   }
   return await getTweetV2(tweetResponse.data.id, auth, optionsConfig);
